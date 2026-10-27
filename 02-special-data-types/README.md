@@ -76,5 +76,3 @@ function throwError(errorMessage: string): never {
 | **`unknown`** | Safe flexible type | Must check type before using | Use when data type is unknown |
 | **`void`** | No return value in functions | Just execute code | Use for log or print functions |
 | **`never`** | Never returns normally | Throw error or infinite loop | Use for error-handling functions |
-
-```
