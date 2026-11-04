@@ -28,3 +28,10 @@ Thumbs.db
 *.njsproj
 *.sln
 "@ | Set-Content -Path ".gitignore" -Encoding utf8
+
+# Environment variables & secrets (added by GitHub Guardian)
+*.env
+!.env.sample
+.envrc
+.venv/
+venv/
