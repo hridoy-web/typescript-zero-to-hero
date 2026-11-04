@@ -1,0 +1,27 @@
+{
+  "name": "typescript-zero-to-hero",
+  "version": "1.0.0",
+  "description": "Production-grade TypeScript roadmap and practice handbook",
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "watch": "tsx watch",
+    "build": "tsc"
+  },
+   "keywords": ["typescript"],
+  "author": "Hridoy Chowdhury",
+  "license": "ISC",
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "12.16.1",
+      "onFail": "download"
+    }
+  },
+  "packageManager": "pnpm@12.16.1",
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
+  }
+}

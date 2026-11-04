@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "ES2022", // Sets modern JS output version
+    "module": "NodeNext", // Uses modern Node ESM system
+    "moduleResolution": "NodeNext", // Resolves packages using Node rules
+    "moduleDetection": "force", // Treats every file as module
+    "rootDir": "./", // Source files root folder path
+    "outDir": "./dist", // Compiled JS output folder path
+    "strict": true, // Enables all strict type checks
+    "noImplicitAny": true, // Blocks hidden 'any' type usage
+    "strictNullChecks": true, // Prevents null or undefined crashes
+    "noUncheckedIndexedAccess": true, // Adds undefined to index access
+    "noImplicitOverride": true, // Requires 'override' keyword in OOP
+    "esModuleInterop": true, // Fixes CommonJS and ESM imports
+    "skipLibCheck": true, // Skips checking node_modules types
+    "forceConsistentCasingInFileNames": true // Enforces exact file name casing
+  },
+  "include": ["module-*/**/*.ts"], // Checks TS files inside modules
+  "exclude": ["node_modules", "dist"] // Ignores build and dependency folders
+}
