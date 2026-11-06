@@ -1,5 +1,5 @@
 // Module 01: TypeScript Foundations
-// Topic 01: Type Inference, Type Annotation, and 7 Primitive Types
+// TOPIC 01: Type Inference, Type Annotation, and 7 Primitive Types
 
 /**
  * OVERVIEW: The 7 Primitive Types in TypeScript:
