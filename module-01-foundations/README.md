@@ -91,3 +91,63 @@ When working with complex data structures like Arrays, Tuples, and Objects, diff
 | **`undefined`** | ⭐ (Almost Never) | Avoided in arrays. Standard arrays use missing indexes or optional properties instead. |
 | **`bigint`** | ⭐ (Rare Case) | Used only in specialized high-level financial or crypto ledger arrays. |
 | **`symbol`** | ⭐ (Rare Case) | Never used inside standard application arrays or tuples. |
+
+---
+
+## 📌 Topic 03: Functions, Parameters, Rest/Spread & Destructuring
+**File:** [`03-functions-and-destructuring.ts`](./03-functions-and-destructuring.ts)
+
+This handbook is designed to lock every concept into your permanent memory for interviews, assignments, and production-grade software engineering.
+
+---
+
+### 1. Functions: Regular vs. Arrow Functions & Hoisting
+
+* **Regular Function (`function name() {}`):** 
+  * **When to use:** For large utility functions or when you want the benefit of **Hoisting**.
+  * **What is Hoisting?** Hoisting is JavaScript's default behavior where variable and function declarations are moved (or "hoisted") to the top of their scope *before* code execution. This means you can call a regular function *before* writing it in your code file without throwing an error.
+* **Arrow Function (`const name = () => {}`):**
+  * **When to use:** Modern industry standard (especially in React/Next.js components and callbacks like `.map()` or `.filter()`). Note: Arrow functions do *not* support hoisting; you must declare them before calling.
+
+---
+
+### 2. Explicit Return Types & The `void` Keyword
+
+* **Why Always Declare Explicit Return Types?** 
+  * While TypeScript can sometimes *infer* (guess) return types based on the function body, relying on inference is a bad practice. Writing explicit return types (e.g., `(): number => {}`) acts as a **safety lock**. It prevents accidental bugs (like returning the wrong data type), enforces a strict code contract, and ensures clarity across your team without needing to parse the entire function body.
+* **What is `void`?**
+  * **When to use:** Used as a return type when a function performs an action (like logging data or saving to a database) but **returns nothing**. It explicitly blocks you from writing a `return` statement inside that function.
+
+---
+
+### 3. Parameters Best Practices: How Many & Default Values
+
+* **How many parameters are ideal?** 
+  * Keeping parameters to **1 to 3** is best practice. If a function requires more than 3 parameters (e.g., creating a user profile with 10 fields), **never pass them individually**. Instead, bundle them into a single **Object Parameter**, which is cleaner, safer, and order-independent.
+* **Default Parameter Values (`discountRate: number = 0.05`):**
+  * **When to use:** When you want a fallback value. If the caller forgets to pass that argument or passes `undefined`, TypeScript automatically assigns the default value. You can easily override it by passing a dynamic value.
+
+---
+
+### 4. Spread Operator (`...`) vs. Rest Parameters (`...`)
+
+Many developers confuse these two because they both use three dots (`...`), but their roles are completely opposite:
+
+| Feature | Spread Operator (`...`) | Rest Parameters (`...`) |
+| :--- | :--- | :--- |
+| **Direction** | **Expands / Unpacks** elements. | **Collects / Packs** elements. |
+| **Where it is used** | Used in arrays and objects to copy, clone, or merge data (`[...arr1, ...arr2]`). | Used in function parameters to accept unlimited arguments into a single array (`(...prices: number[])`). |
+| **Real-World Role** | Immutable state updates and combining lists safely. | Handling math calculations, flexible API inputs, or argument lists of unknown length. |
+
+* **Best Practice:** Always use Spread (`...`) for immutability instead of mutating arrays/objects directly. Always type Rest parameters explicitly as an array (e.g., `...scores: number[]`).
+
+---
+
+### 5. Object & Array Destructuring & The Aliasing Trap
+
+* **Object Destructuring:** Extracting properties directly from an object into variables (e.g., `const { title, price } = product`). In React, we heavily use parameter destructuring (`function MyComponent({ title }: Product)`) for clean component props.
+* **Array Destructuring with Rest:** Extracting specific items by position while gathering the rest into a clean array (e.g., `const [first, ...remaining] = scores;`).
+* **⚠️ What is ALIASING (The Renaming Trap)?**
+  * **Definition:** Aliasing means **renaming a destructured variable** to prevent naming collisions when a variable with the exact same name already exists in your current scope.
+  * **Syntax:** We use a colon (`:`) inside the curly braces. Example: `{ title: productTitle }`. 
+  * **Interview Note:** Remember, inside object destructuring, the colon (`:`) **does NOT mean type annotation**; it means *rename this property to this new variable name*.
