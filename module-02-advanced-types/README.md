@@ -214,3 +214,36 @@ type MyMappedType<T> = {
 1. **Form State Tracking:** Converting all object fields to `boolean` to track dirty or touched states in forms (`[K in keyof T]: boolean`).
 2. **Under the Hood of Utility Types:** TypeScript's built-in `Readonly<T>` and `Partial<T>` are built completely using Mapped Types.
 3. **Key Remapping (`as` clause):** Creating dynamic getter methods using template literals (`[K in keyof T as \`get_${K}\`]: () => T[K]`).
+
+---
+
+## 📌 Topic 07: Built-in Utility Types
+**File:** [`07-utility-types.ts`](./07-utility-types.ts)
+### 1. Master Utility Types Quick Reference Matrix
+| Utility Type | What It Does | Real-World Role | Code Syntax |
+| :--- | :--- | :--- | :--- |
+| **`Pick<T, K>`** | Selects only specified keys | Creating small view models | `Pick<User, "name" \| "email">` |
+| **`Omit<T, K>`** | Removes specified keys | Stripping sensitive passwords/IDs | `Omit<User, "password">` |
+| **`Partial<T>`** | Makes **all** fields optional (`?`) | `PATCH` API request bodies | `Partial<User>` |
+| **`Required<T>`** | Makes **all** fields mandatory | Form submission validation | `Required<User>` |
+| **`Readonly<T>`** | Freezes all fields (immutable) | Config constants, state stores | `Readonly<User>` |
+| **`Record<K, V>`** | Creates a typed key-value dictionary | Lookup maps, enum translations | `Record<Role, string>` |
+---
+### 2. Deep Dive: Real-World Use Cases
+#### 1. The `PATCH` Request Pattern (`Partial<T>`):
+When a user updates their profile on a website, they don't send their entire object again. They might only update their bio. Typing the controller with `Partial<User>` allows passing any subset of fields without compiler errors:
+```typescript
+function updateProfile(id: number, payload: Partial<User>) {
+  // payload can be { name: "New Name" } or { email: "new@email.com" }
+}
+```
+#### 2. The Clean Public DTO Pattern (`Omit<T, K>`):
+When returning user data from an Express backend to the frontend, you must never send the hashed password:
+```typescript
+type UserResponse = Omit<DatabaseUser, "password" | "salt">;
+```
+#### 3. Dynamic Key-Value Pairs (`Record<Keys, Values>`):
+Used when creating dictionaries where keys belong to a specific union and values have a consistent type:
+```typescript
+type ProductStock = Record<"shoes" | "shirts" | "hats", number>;
+```
