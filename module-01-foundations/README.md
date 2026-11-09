@@ -199,58 +199,46 @@ This handbook serves as a definitive mental model and cheat sheet for custom typ
   type NumberID = { id: number };
   type Impossible = StringID & NumberID;
 
-```
 
 * **Answer:** TypeScript evaluates the property `id` as `string & number`. Since no single value in JavaScript can simultaneously be both a `string` and a `number`, TypeScript collapses the property type to **`never`**. Attempting to assign any value to this object will cause a strict compilation failure!
 
 ---
 
-### 📊 Master Comparison: Union (`|`) vs. Intersection (`&`)
-
-| Feature | Union Type (`|`) | Intersection Type (`&`) |
-| --- | --- | --- |
+### 📊 Union vs. Intersection Master Comparison
+| Feature | Union Type (`\|`) | Intersection Type (`&`) |
+| :--- | :--- | :--- |
 | **Logic** | Logical **OR** (Either / Or) | Logical **AND** (Both / All) |
-| **Mental Model** | Choosing **one** option from a menu | A superhero possessing **all** powers combined |
-| **Object Requirement** | Must satisfy **at least one** branch | Must strictly satisfy **all joined types** |
-| **Production Real-World Use** | API Response States (`SuccessResponse | ErrorResponse`) | Database Models (`BaseModel & UserInfo & Permissions`) |
-| **Type Conflicts** | Expands allowed value choices | Conflicting primitive keys collapse into **`never`** |
+| **Mental Model** | A menu where you choose **one** option | An all-in-one superhero possessing **all** powers |
+| **Object Requirement**| Must satisfy **at least one** branch | Must strictly satisfy **all joined types** |
+| **Real-World Example**| HTTP response states (`Success \| Error`) | Database entity (`BaseModel & UserInfo & Permissions`) |
+| **Type Conflict** | Expands allowed choices | Conflicting primitive keys collapse into **`never`** |
 
 ---
 
 ## 📌 Topic 05: Ternary, Optional Chaining (`?.`) & Nullish Coalescing (`??`)
 **File:** [`05-ternary-nullish-chaining.ts`](./05-ternary-nullish-chaining.ts)
-
 ### 1. Ternary Operator (`condition ? true : false`)
 * **What it does:** A clean, concise replacement for simple `if/else` statements.
 * **Best Practice:** Use for single-condition expressions. Avoid nesting ternary operators (e.g., `a ? b : c ? d : e`) as it destroys code readability.
-
 ---
-
 ### 2. Optional Chaining (`?.`)
 * **The Problem:** In vanilla JavaScript, accessing nested properties on `null` or `undefined` throws `TypeError: Cannot read properties of undefined`, crashing the application.
 * **The Solution:** Adding `?.` halts execution and immediately evaluates to `undefined` without throwing runtime errors:
   * **Nested Objects:** `user?.address?.city`
   * **Optional Methods:** `user?.printDetails?.()`
   * **Optional Arrays:** `team?.members?.[0]`
-
 ---
-
 ### 3. The Dangerous Trap: Logical OR (`||`) vs. Nullish Coalescing (`??`)
-
 This is one of the most common sources of production bugs in modern web applications:
-
 | Operator | Syntax | Considers Falsy / Replaces | Keeps Intact |
 | :--- | :--- | :--- | :--- |
 | **Logical OR** | `value \|\| fallback` | `false`, `0`, `""`, `NaN`, `null`, `undefined` | Any truthy value |
 | **Nullish Coalescing** | `value ?? fallback` | **Only `null` and `undefined`** | `0`, `false`, `""`, `NaN` (Valid data) |
-
 #### 🚨 Why `||` creates critical bugs:
 * **Zero is valid data:** If a user’s bank balance or cart quantity is `0`, writing `balance || 100` mistakenly replaces `0` with `100`!
 * **Empty string is valid data:** If a user intentionally clears their bio (`""`), `bio || "Default"` mistakenly restores the default text.
 * **Rule:** Always use **`??` (Nullish Coalescing)** when providing fallback defaults for numbers, strings, and booleans!
-
 ---
-
 ### 4. The Production Standard Pattern: `?.` with `??`
 Combining Optional Chaining with Nullish Coalescing guarantees safe traversal and a guaranteed fallback:
 ```typescript
