@@ -21,7 +21,7 @@ dynamicInput = "Hridoy Chowdhury"; // Value reassignment is allowed
 // Type Narrowing (Checking type before using)
 if (typeof dynamicInput === "string") {
   const upperName = dynamicInput.toUpperCase(); // ✅ Safe: TS knows it is a string
-  console.log("Narrowed String:", upperName);
+  // console.log("Narrowed String:", upperName);
 }
 
 
