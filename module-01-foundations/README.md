@@ -247,3 +247,40 @@ const postal = user?.address?.postalCode ?? 1000;
 * If `address` doesn't exist $\rightarrow$ safely returns `1000`.
 * If `postalCode` is `undefined` $\rightarrow$ safely returns `1000`.
 * If `postalCode` is `0` $\rightarrow$ correctly returns `0`.
+
+---
+## 📌 Topic 06: Unknown, Never, Void & Nullable Types
+**File:** [`06-unknown-never-nullable.ts`](./06-unknown-never-nullable.ts)
+This final handbook section of Module 1 covers strict type safety boundaries, unreachable states, and null handling.
+---
+### 1. Special Types Master Comparison Matrix
+| Special Type | Safety Level | Can Assign Anything? | Can Call Methods Directly? | Real-World Role |
+| :--- | :--- | :--- | :--- | :--- |
+| **`any`** | ❌ Dangerous | ✅ Yes | ✅ Yes (Causes runtime crashes!) | Escape hatch for JS migration (Avoid in production) |
+| **`unknown`** | 🔒 100% Safe | ✅ Yes | ❌ No (Must narrow type first) | External API payloads, `catch(err: unknown)` |
+| **`void`** | ℹ️ Standard | N/A | N/A | Functions that finish but return no value |
+| **`never`** | 🕳️ Strict | ❌ No | ❌ No | Functions that throw errors or exhaustive checks |
+---
+### 2. `unknown` Type (The Safe Alternative to `any`)
+* **What it is:** The type-safe counterpart to `any`. It can hold any value, but TypeScript **strictly forbids** you from performing operations on it until you explicitly prove its type using **Type Narrowing** (`typeof`, `instanceof`, or custom guards).
+* **Best Practice:** Always prefer `unknown` over `any` when dealing with dynamic inputs, API payloads, or try-catch error objects (`catch (err: unknown)`).
+---
+### 3. `void` vs. `never`: The Finisher vs. The Black Hole
+* **`void`:** The function finishes its journey from top to bottom. It returns control back to the caller (returns `undefined` under the hood).
+* **`never`:** The function **never returns control** to the caller. Execution halts completely because an exception was thrown (`throw new Error()`) or the process is stuck in an infinite loop.
+---
+### 4. 🌟 Senior Engineering Pattern: Exhaustive Check with `never`
+In large enterprise codebases, when you switch over a union type:
+```typescript
+switch (role) {
+  case "admin": return ...;
+  case "editor": return ...;
+  default:
+    const exhaustiveCheck: never = role; // Compile error if any union case is unhandled!
+}
+```
+If a teammate adds a new role to the union, TypeScript will immediately throw a red compiler error at the `default` case, forcing them to handle it!
+---
+### 5. Nullable Types (`null` & `undefined`)
+* **What it is:** Explicitly allowing `null` or `undefined` in union types (e.g., `string | null`).
+* **Best Practice:** With TypeScript's `strictNullChecks: true`, use guard clauses (`if (keyword === null)`) before calling methods like `.trim()` to prevent runtime crashes.
