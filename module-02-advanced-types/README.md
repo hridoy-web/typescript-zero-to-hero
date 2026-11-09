@@ -92,3 +92,40 @@ When writing generics, developers follow standard naming letters instead of rand
 ### 4. Golden Rule for Architecture
 * Use **`interface`** to define concrete object shapes (e.g., `User`, `Product`).
 * Use **Generics (`<T>`)** to build reusable containers, wrappers, and utility functions that wrap around those object shapes.
+
+---
+
+## 📌 Topic 04: Generic Constraints & `keyof` Operator
+**File:** [`04-generic-constraints-keyof.ts`](./04-generic-constraints-keyof.ts)
+### 1. 💡 What is a Generic Constraint?
+* **Problem:** By default, a generic parameter `<T>` is unconstrained—it can accept anything (strings, numbers, booleans, objects). If you try to access `T.id`, TypeScript complains because `id` might not exist.
+* **Solution (`extends`):** We lock down requirements using `extends`:
+  ```typescript
+  function printId<T extends { id: number }>(item: T) { ... }
+  ```
+* **The Analogy:** A VIP entry ticket. Anyone can enter (Generics), but they must present a valid ID card (`extends`).
+---
+### 2. The `keyof` Operator
+* **What it does:** Extracts all public property names of an object type and returns them as a **Literal Union Type**.
+* **Example:**
+  ```typescript
+  type User = { id: number; name: string };
+  type UserKeys = keyof User; // "id" | "name"
+  ```
+---
+### 3. The Industry Standard Pattern: `<T, K extends keyof T>`
+Used to write 100% bug-free object property accessors:
+```typescript
+function getProperty<T, K extends keyof T>(obj: T, key: K): T[K] {
+  return obj[key];
+}
+```
+| Component | Technical Role |
+| :--- | :--- |
+| **`T`** | The target object type passed into the function. |
+| **`K extends keyof T`** | Enforces that key `K` **must exist** inside object `T`. Prevents invalid typos. |
+| **`T[K]`** | **Indexed Access Type:** Dynamically resolves the exact return type of that property. |
+---
+### 🧠 Key Takeaways
+* Never use `obj[key as any]` in production. Always use `<T, K extends keyof T>` to eliminate runtime `undefined` property crashes.
+* Indexed Access Type (`T[K]`) automatically matches the return type (e.g., if you access a number property, the return type is automatically `number`).
