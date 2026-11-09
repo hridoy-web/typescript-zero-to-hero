@@ -52,3 +52,43 @@ interface Cart {
 ### 3. The Senior Engineering Rule of Thumb
 * Use **`interface`** when defining **Objects, React Component Props, or OOP Class structures**.
 * Use **`type`** when defining **Unions, Primitives, Tuples, or Complex Utility calculations**.
+
+---
+
+## 📌 Topic 03: Generics Mental Model
+**File:** [`03-generics-mental-model.ts`](./03-generics-mental-model.ts)
+
+### 1. 💡 Mental Model: What is a Generic?
+* **Definition:** Generics allow you to write reusable and flexible components using type variables (like `<T>`).
+* **The Analogy:** 
+  * A **Static Interface** is like a fixed size 8 shoe (only fits size 8).
+  * A **Generic Interface `<T>`** is like an adjustable strap shoe that adapts to whatever size you pass into it dynamically.
+
+---
+
+### 2. Why Use Generics Instead of Static Interfaces?
+
+| Feature | Static Interface (`UserResponse`) | Generic Interface (`ApiResponse<T>`) |
+| :--- | :--- | :--- |
+| **Flexibility** | Locked to a single data type. | Works with any data type dynamically. |
+| **Code Duplication** | Requires a separate interface for every single entity. | Follows DRY rule by using **one** universal wrapper. |
+| **Type Safety** | Safe, but inflexible. | 100% type-safe without using dangerous `any`. |
+
+---
+
+### 3. Industry Standard Naming Conventions for Generics
+When writing generics, developers follow standard naming letters instead of random words:
+
+| Letter | Stands For | Common Use Case |
+| :--- | :--- | :--- |
+| **`T`** | Type | Default generic placeholder for any data type. |
+| **`U`** | Second Type | Used when a second type parameter is needed. |
+| **`K`** | Key | Used for object keys (e.g., `keyof T`). |
+| **`V`** | Value | Used for object values in key-value pairs. |
+| **`E`** | Element | Used for items inside arrays or lists. |
+
+---
+
+### 4. Golden Rule for Architecture
+* Use **`interface`** to define concrete object shapes (e.g., `User`, `Product`).
+* Use **Generics (`<T>`)** to build reusable containers, wrappers, and utility functions that wrap around those object shapes.

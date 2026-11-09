@@ -50,6 +50,7 @@ interface Developer {
 
 interface Developer {
   yearsOfExperience: number;
+  isActive: true | false
 }
 
 interface Developer {
@@ -61,9 +62,10 @@ const leadDev: Developer = {
   name: "Hridoy Chowdhury",
   primaryLanguage: "TypeScript",
   yearsOfExperience: 2,
+  isActive: true,
   Skill: ["JS", "TS", "NEXT.JS"]
 };
-// console.log("03 Merged Developer:", leadDev);
+console.log("03 Merged Developer:", leadDev);
 
 // Note: Type Alias cannot do this. Writing 'type Dev = ...' twice throws duplicate error!
 
