@@ -152,11 +152,6 @@ Many developers confuse these two because they both use three dots (`...`), but 
   * **Syntax:** We use a colon (`:`) inside the curly braces. Example: `{ title: productTitle }`. 
   * **Interview Note:** Remember, inside object destructuring, the colon (`:`) **does NOT mean type annotation**; it means *rename this property to this new variable name*.
 
-  তোমার `module-01-foundations/04-union-intersection-aliases.ts` ফাইলের সাথে শতভাগ ম্যাচ করে তৈরি করা মাস্টারপিস **`README.md`** সেকশনটি নিচে দেওয়া হলো। এটি এমনভাবে সাজানো হয়েছে যাতে পরীক্ষার আগে বা ইন্টারভিউয়ের সময় ৫ মিনিট চোখ বুলালেই সব কনসেপ্ট স্থায়ীভাবে মস্তিষ্কে লক হয়ে যায়।
-
-তোমার `module-01-foundations/README.md` ফাইলের শেষ অংশে এই অংশটুকু যুক্ত করে নাও:
-
-```markdown
 ---
 
 ## 📌 Topic 04: Type Alias, Union (`|`) & Intersection (`&`)
@@ -221,3 +216,46 @@ This handbook serves as a definitive mental model and cheat sheet for custom typ
 | **Type Conflicts** | Expands allowed value choices | Conflicting primitive keys collapse into **`never`** |
 
 ---
+
+## 📌 Topic 05: Ternary, Optional Chaining (`?.`) & Nullish Coalescing (`??`)
+**File:** [`05-ternary-nullish-chaining.ts`](./05-ternary-nullish-chaining.ts)
+
+### 1. Ternary Operator (`condition ? true : false`)
+* **What it does:** A clean, concise replacement for simple `if/else` statements.
+* **Best Practice:** Use for single-condition expressions. Avoid nesting ternary operators (e.g., `a ? b : c ? d : e`) as it destroys code readability.
+
+---
+
+### 2. Optional Chaining (`?.`)
+* **The Problem:** In vanilla JavaScript, accessing nested properties on `null` or `undefined` throws `TypeError: Cannot read properties of undefined`, crashing the application.
+* **The Solution:** Adding `?.` halts execution and immediately evaluates to `undefined` without throwing runtime errors:
+  * **Nested Objects:** `user?.address?.city`
+  * **Optional Methods:** `user?.printDetails?.()`
+  * **Optional Arrays:** `team?.members?.[0]`
+
+---
+
+### 3. The Dangerous Trap: Logical OR (`||`) vs. Nullish Coalescing (`??`)
+
+This is one of the most common sources of production bugs in modern web applications:
+
+| Operator | Syntax | Considers Falsy / Replaces | Keeps Intact |
+| :--- | :--- | :--- | :--- |
+| **Logical OR** | `value \|\| fallback` | `false`, `0`, `""`, `NaN`, `null`, `undefined` | Any truthy value |
+| **Nullish Coalescing** | `value ?? fallback` | **Only `null` and `undefined`** | `0`, `false`, `""`, `NaN` (Valid data) |
+
+#### 🚨 Why `||` creates critical bugs:
+* **Zero is valid data:** If a user’s bank balance or cart quantity is `0`, writing `balance || 100` mistakenly replaces `0` with `100`!
+* **Empty string is valid data:** If a user intentionally clears their bio (`""`), `bio || "Default"` mistakenly restores the default text.
+* **Rule:** Always use **`??` (Nullish Coalescing)** when providing fallback defaults for numbers, strings, and booleans!
+
+---
+
+### 4. The Production Standard Pattern: `?.` with `??`
+Combining Optional Chaining with Nullish Coalescing guarantees safe traversal and a guaranteed fallback:
+```typescript
+const postal = user?.address?.postalCode ?? 1000;
+```
+* If `address` doesn't exist $\rightarrow$ safely returns `1000`.
+* If `postalCode` is `undefined` $\rightarrow$ safely returns `1000`.
+* If `postalCode` is `0` $\rightarrow$ correctly returns `0`.
