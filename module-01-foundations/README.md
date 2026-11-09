@@ -151,3 +151,73 @@ Many developers confuse these two because they both use three dots (`...`), but 
   * **Definition:** Aliasing means **renaming a destructured variable** to prevent naming collisions when a variable with the exact same name already exists in your current scope.
   * **Syntax:** We use a colon (`:`) inside the curly braces. Example: `{ title: productTitle }`. 
   * **Interview Note:** Remember, inside object destructuring, the colon (`:`) **does NOT mean type annotation**; it means *rename this property to this new variable name*.
+
+  তোমার `module-01-foundations/04-union-intersection-aliases.ts` ফাইলের সাথে শতভাগ ম্যাচ করে তৈরি করা মাস্টারপিস **`README.md`** সেকশনটি নিচে দেওয়া হলো। এটি এমনভাবে সাজানো হয়েছে যাতে পরীক্ষার আগে বা ইন্টারভিউয়ের সময় ৫ মিনিট চোখ বুলালেই সব কনসেপ্ট স্থায়ীভাবে মস্তিষ্কে লক হয়ে যায়।
+
+তোমার `module-01-foundations/README.md` ফাইলের শেষ অংশে এই অংশটুকু যুক্ত করে নাও:
+
+```markdown
+---
+
+## 📌 Topic 04: Type Alias, Union (`|`) & Intersection (`&`)
+**File:** [`04-union-intersection-aliases.ts`](./04-union-intersection-aliases.ts)
+
+This handbook serves as a definitive mental model and cheat sheet for custom types, logical type combinations, and advanced type-narrowing patterns.
+
+---
+
+### 1. Type Alias (`type` Keyword)
+
+* **Mental Model:** Think of a Type Alias as giving a custom **nickname** to any complex type signature so you don't have to rewrite it everywhere.
+* **Why Use It?** Enforces the **DRY (Don't Repeat Yourself)** principle. Instead of repeating `{ id: string; name: string }` across 20 functions, declare it once and reuse it across the entire codebase.
+* **What Can It Alias?**
+  * **Primitives & Unions:** `type ID = string | number;`
+  * **Objects:** `type UserProfile = { username: string; email: string; };`
+  * **Function Blueprints:** `type MathOperation = (firstNum: number, secondNum: number) => number;` (Crucial for React callback props like `onClick` or `onSubmit`).
+
+---
+
+### 2. Union Types (`|`) - Logical "OR"
+
+* **Mental Model (Restaurant Menu):** You can order a soda **OR** a juice, but not both under a single choice selection.
+* **Literal Union:** Restricts a variable strictly to a closed set of specific string or number values (e.g., `type PaymentGateway = "BKASH" | "NAGAD" | "ROCKET";`). Eliminates accidental typos and gives instant IDE autocompletion.
+* **Discriminated Union (Senior Engineering Pattern):**
+  * A pattern where every object in a Union shares a common literal property (called the **Discriminant**, e.g., `status: "success"` vs `status: "error"`).
+  * Allows TypeScript to perform automatic and safe **Type Narrowing** inside standard `if/else` or `switch` statements without runtime errors.
+
+---
+
+### 3. Intersection Types (`&`) - Logical "AND"
+
+* **Mental Model (Superhero Mashup):** Iron Man's suit **AND** Doctor Strange's magic combined into one single person—possessing every single power simultaneously.
+* **Concept:** Merges multiple separate type blueprints into one comprehensive **Composite Super-Type**.
+* **Object Requirement:** Any variable instantiated with an Intersection type **must satisfy every property** of all joined types.
+* **Production Use-Case:** Creating scalable Database Entities (e.g., combining `BaseEntity` timestamps with `EmployeeDetails` and `AdminPrivileges`).
+
+---
+
+### 4. ⚠️ The Impossible Intersection Gotcha (`never` Type)
+
+* **Interview Trap Question:** What happens if you intersect two object types containing identical keys with conflicting primitive types?
+  ```typescript
+  type StringID = { id: string };
+  type NumberID = { id: number };
+  type Impossible = StringID & NumberID;
+
+```
+
+* **Answer:** TypeScript evaluates the property `id` as `string & number`. Since no single value in JavaScript can simultaneously be both a `string` and a `number`, TypeScript collapses the property type to **`never`**. Attempting to assign any value to this object will cause a strict compilation failure!
+
+---
+
+### 📊 Master Comparison: Union (`|`) vs. Intersection (`&`)
+
+| Feature | Union Type (`|`) | Intersection Type (`&`) |
+| --- | --- | --- |
+| **Logic** | Logical **OR** (Either / Or) | Logical **AND** (Both / All) |
+| **Mental Model** | Choosing **one** option from a menu | A superhero possessing **all** powers combined |
+| **Object Requirement** | Must satisfy **at least one** branch | Must strictly satisfy **all joined types** |
+| **Production Real-World Use** | API Response States (`SuccessResponse | ErrorResponse`) | Database Models (`BaseModel & UserInfo & Permissions`) |
+| **Type Conflicts** | Expands allowed value choices | Conflicting primitive keys collapse into **`never`** |
+
+---

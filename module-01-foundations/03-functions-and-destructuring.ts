@@ -1,7 +1,8 @@
-// ============================================================================
+// =====================================================================
 // MODULE 01: TYPESCRIPT FOUNDATIONS
 // TOPIC 03: FUNCTIONS, PARAMETERS, REST/SPREAD & DESTRUCTURING
-// ============================================================================
+// =====================================================================
+
 
 // 01: FUNCTION PARAMETERS & RETURN TYPES (Mandatory Annotation)
 // Rule: Function parameters and return types must ALWAYS have explicit annotations
