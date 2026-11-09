@@ -129,3 +129,57 @@ function getProperty<T, K extends keyof T>(obj: T, key: K): T[K] {
 ### 🧠 Key Takeaways
 * Never use `obj[key as any]` in production. Always use `<T, K extends keyof T>` to eliminate runtime `undefined` property crashes.
 * Indexed Access Type (`T[K]`) automatically matches the return type (e.g., if you access a number property, the return type is automatically `number`).
+
+---
+
+## 📌 Topic 05: Enum vs. `as const` Assertion
+**File:** [`05-enum-vs-as-const.ts`](./05-enum-vs-as-const.ts)
+### 1. Master Comparison Matrix
+| Feature | Enum (`enum`) | Const Assertion (`as const`) |
+| :--- | :--- | :--- |
+| **Runtime Footprint** | ❌ Generates actual JS IIFE objects (adds bundle weight). | ✅ **Plain lightweight JS object** (Zero extra wrapper code). |
+| **Flexibility** | Requires importing the Enum object to pass values. | Accepts direct string literals (e.g., `"EDITOR"`). |
+| **Type Safety** | Numeric Enums can suffer from reverse mapping bugs. | 100% strict string literal type safety. |
+| **Mutability** | Object properties can sometimes be mutated. | Fully locks object properties as `readonly`. |
+| **Tree-Shaking** | ❌ Poor (Bundlers often fail to remove unused enums). | ✅ **100% Tree-Shakeable** in modern bundlers. |
+| **Industry Preference** | Used in legacy codebases or OOP frameworks. | **Preferred modern standard** (Next.js, Express, React). |
+---
+### 2. What Happens Without `as const`? (Type Widening)
+Without `as const`, TypeScript widens specific string values into generic `string` types and allows property mutation:
+```typescript
+// Without 'as const' (Type is widened to generic string, mutable)
+const UserRole = {
+  Admin: "ADMIN", // Type: string
+};
+UserRole.Admin = "SOMETHING_ELSE"; // Allowed (Dangerous!)
+// With 'as const' (Type is locked as readonly literal, immutable)
+const UserRole = {
+  Admin: "ADMIN", // Type: readonly "ADMIN"
+} as const;
+// UserRole.Admin = "OTHER"; // ❌ Error: Cannot assign to read-only property
+```
+---
+### 3. Extracting Union Types from `as const` Object
+```typescript
+const UserRoleConst = {
+  Admin: "ADMIN",
+  Editor: "EDITOR",
+  Viewer: "VIEWER",
+} as const;
+// Step A: Extract Object Keys Union -> "Admin" | "Editor" | "Viewer"
+type UserRoleKeys = keyof typeof UserRoleConst;
+// Step B: Extract Object Values Union -> "ADMIN" | "EDITOR" | "VIEWER"
+type UserRoleValues = (typeof UserRoleConst)[keyof typeof UserRoleConst];
+```
+---
+### 4. Extracting Union Types from `as const` Array
+A very common pattern in validation libraries (like Zod) and database schemas:
+```typescript
+const AllowedStatuses = ["pending", "approved", "rejected"] as const;
+// Indexed access with [number] extracts union of all array elements
+type Status = (typeof AllowedStatuses)[number]; // "pending" | "approved" | "rejected"
+```
+---
+### 🧠 Senior Engineering Rule of Thumb
+* **Avoid `enum`** in modern TypeScript applications (Next.js, Express, Vite).
+* Always prefer **`as const` + Union Types** for roles, status flags, themes, or config constants to keep bundle sizes tiny, tree-shakeable, and 100% type-safe.
