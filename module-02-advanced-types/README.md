@@ -183,3 +183,34 @@ type Status = (typeof AllowedStatuses)[number]; // "pending" | "approved" | "rej
 ### 🧠 Senior Engineering Rule of Thumb
 * **Avoid `enum`** in modern TypeScript applications (Next.js, Express, Vite).
 * Always prefer **`as const` + Union Types** for roles, status flags, themes, or config constants to keep bundle sizes tiny, tree-shakeable, and 100% type-safe.
+
+---
+
+## 📌 Topic 06: Conditional & Mapped Types
+**File:** [`06-conditional-and-mapped-types.ts`](./06-conditional-and-mapped-types.ts)
+### 1. 💡 Mental Model: What Are They?
+| Feature | Mental Model | Real-World Analogy |
+| :--- | :--- | :--- |
+| **Conditional Type** | **Type-level `if / else`** | A gate check: "If input matches Type A, return Type X, else return Type Y". |
+| **Mapped Type** | **Type-level `.map()` loop** | A factory conveyor belt: Takes every key of an object and transforms its type. |
+---
+### 2. Conditional Types Syntax & Formula
+```typescript
+type Result<T> = T extends ConditionType ? TrueType : FalseType;
+```
+* **Why it matters:** Enables writing dynamic, smart types that change based on incoming input types (e.g., resolving API responses or filtering types).
+---
+### 3. Mapped Types Syntax & Formula
+```typescript
+type MyMappedType<T> = {
+  [Key in keyof T]: NewType;
+};
+```
+* **`keyof T`:** Extracts all keys of object `T` as a union.
+* **`Key in ...`:** Loops over each key one by one (like `for...in` loop).
+* **`T[Key]`:** Accesses the original type of that specific key.
+---
+### 4. Real-World Use Cases
+1. **Form State Tracking:** Converting all object fields to `boolean` to track dirty or touched states in forms (`[K in keyof T]: boolean`).
+2. **Under the Hood of Utility Types:** TypeScript's built-in `Readonly<T>` and `Partial<T>` are built completely using Mapped Types.
+3. **Key Remapping (`as` clause):** Creating dynamic getter methods using template literals (`[K in keyof T as \`get_${K}\`]: () => T[K]`).
