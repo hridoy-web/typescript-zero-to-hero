@@ -22,3 +22,33 @@ A comprehensive production handbook covering Generics, Type Assertions, Interfac
 ### 🧠 Key Takeaways & Gotchas
 * **⚠️ Type Assertion does NOT convert values:** Writing `"hello" as number` will not turn text into a number. The JavaScript runtime will still see it as a string.
 * **Double Assertion (`as unknown as Target`):** If two types have zero overlap, TypeScript blocks direct assertion. You must assert to `unknown` first, though this should be avoided unless strictly necessary.
+
+---
+
+## 📌 Topic 02: Interface vs. Type Alias
+**File:** [`02-interface-vs-type-alias.ts`](./02-interface-vs-type-alias.ts)
+### 1. Master Comparison Matrix
+| Feature | Type Alias (`type`) | Interface (`interface`) |
+| :--- | :--- | :--- |
+| **Primary Role** | Can define primitives, unions, tuples, functions, objects | Exclusively used to model **Object shapes & Class contracts** |
+| **Inheritance Syntax** | Intersection operator (`&`) | `extends` keyword |
+| **Declaration Merging** | ❌ No (Throws duplicate identifier error) | ✅ **Yes** (Same name interfaces automatically merge) |
+| **Union & Primitives** | ✅ Can alias `string \| number` | ❌ Cannot define raw primitive unions |
+| **Performance** | Slightly slower on large complex unions | Compiler optimizes interfaces faster in object trees |
+---
+### 2. What is Declaration Merging?
+If you declare an interface with the same name multiple times, TypeScript merges their definitions into one single interface:
+```typescript
+interface Cart {
+  item: string;
+}
+interface Cart {
+  price: number;
+}
+// Resulting Cart has BOTH 'item' and 'price'
+```
+* **Real-World Role:** Heavily used when extending third-party Express.js `Request` objects to attach custom properties like `req.user`.
+---
+### 3. The Senior Engineering Rule of Thumb
+* Use **`interface`** when defining **Objects, React Component Props, or OOP Class structures**.
+* Use **`type`** when defining **Unions, Primitives, Tuples, or Complex Utility calculations**.
