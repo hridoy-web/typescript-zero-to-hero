@@ -75,7 +75,7 @@ class BankAccount {
   }
 }
 
-// const myBank = new BankAccount("AC-2026-BD", "Hridoy", 5000);
+const myBank = new BankAccount("AC-2026-BD", "Hridoy", 5000);
 // console.log("04 Initial Bank Balance:", myBank.balance);
 // console.log("04 After Deposit:", myBank.deposit(3000));
 // console.log("04 After Withdrawal:", myBank.withdraw(2000));
