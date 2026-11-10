@@ -1,6 +1,4 @@
 # 🏛️ Module 03: Object-Oriented Programming (OOP) in TypeScript
-
----
 ## 📌 Topic 01: Classes, Constructors & Parameter Properties
 **File:** [`01-class-and-parameter-properties.ts`](./01-class-and-parameter-properties.ts)
 ### 1. 💡 Why Do We Need OOP? (OOP vs. Functional Programming)
