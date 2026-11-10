@@ -1,5 +1,5 @@
 # 🏛️ Module 03: Object-Oriented Programming (OOP) in TypeScript
-A production-grade engineering handbook covering the 4 Pillars of OOP, Type Guards, Access Modifiers, and Advanced Design Patterns in TypeScript.
+
 ---
 ## 📌 Topic 01: Classes, Constructors & Parameter Properties
 **File:** [`01-class-and-parameter-properties.ts`](./01-class-and-parameter-properties.ts)
